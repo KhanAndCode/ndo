@@ -56,7 +56,7 @@ StudyEntity.belongsToMany(Course, {
   through: {
     model: CourseStudyEntity,
   },
-  foreignKey: 'seId',
+  foreignKey: 'studyEntityId',
 });
 
 User.belongsToMany(Course, {
@@ -64,11 +64,12 @@ User.belongsToMany(Course, {
   through: {
     model: UserCourse,
   },
-  foreignKey: 'uId',
+  foreignKey: 'userId',
 });
 
 User.hasMany(File, {
   as: 'files',
+  foreignKey: 'userId',
 });
 
 Course.belongsToMany(User, {
@@ -84,7 +85,7 @@ User.belongsToMany(Group, {
   through: {
     model: UserGroup,
   },
-  foreignKey: 'uId',
+  foreignKey: 'userId',
 });
 
 Group.belongsToMany(User, {
@@ -95,16 +96,16 @@ Group.belongsToMany(User, {
   foreignKey: 'groupId',
 });
 
-User.hasMany(Answer);
-StudyEntity.hasMany(Answer);
-Course.hasMany(Answer);
+User.hasMany(Answer, { foreignKey: 'userId' });
+StudyEntity.hasMany(Answer, { foreignKey: 'studyEntityId' });
+Course.hasMany(Answer, { foreignKey: 'courseId' });
 
-Answer.belongsTo(User);
-Answer.belongsTo(StudyEntity);
-Answer.belongsTo(Course);
+Answer.belongsTo(User, { foreignKey: 'userId' });
+Answer.belongsTo(StudyEntity, { foreignKey: 'studyEntityId' });
+Answer.belongsTo(Course, { foreignKey: 'courseId' });
 
-Answer.hasMany(Mark);
-Mark.belongsTo(Answer);
+Answer.hasMany(Mark, { foreignKey: 'answerId' });
+Mark.belongsTo(Answer, { foreignKey: 'answerId' });
 Mark.belongsTo(User, { as: 'author' });
 
 function sync(...args) {
